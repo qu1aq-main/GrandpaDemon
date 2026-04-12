@@ -1,12 +1,14 @@
 # <cy>Grandpa Demon</c>
-<cj>A mod created by ItzKiba and Updated by 0nrush.</c>
+<cj>A mod created by ItzKiba and currently maintained by qu1aq.</c>
 
 ## Features
 * *<cg>Up to 6 new demon difficulties</c>* above Extreme Demon!
 * *<cr>All Rated Extremes Demon List</c>* integration!
-* *<cy>2.2 List support!</c>*
+* *<cy>2.2081 List support!</c>*
 
 *Additionally, the highest demon difficulties each have their own **<cj>animated backgrounds</c>** and **<cg>particles</c>** for the level page!*
+
+*<cl>Background effects and particles can be disabled in the mod settings.</c>*
 
 ## New Demon Difficulties
 The difficulties of extreme demons are chosen based on their positions on the [AREDL](https://aredl.pages.dev/#/).
@@ -21,4 +23,4 @@ The difficulties of extreme demons are chosen based on their positions on the [A
 ***Note:** Grandpa Demon is optional and can be disabled in the mod's settings.*
 
 ## Credits
-* **Aredl** for a new api for work mod
+* **Aredl** for providing the API
