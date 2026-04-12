@@ -21,47 +21,53 @@ class $modify(GrDInfoLayer, LevelInfoLayer) {
             return;
         }
 
-        // Get the original difficulty icon
         CCSprite* originalIcon = nullptr;
         bool iconFound = false;
 
-        // Iterate through every object that is a direct child of the layer to find the difficulty face.
-        CCObject* obj;
-        CCARRAY_FOREACH(this->getChildren(), obj) {
-            // Check to see if the object is a sprite.
-            if (CCSprite* newObj = dynamic_cast<CCSprite*>(obj)) {
-                // Check to see if the object is the demon difficulty icon
-                // Note that the child-index "stars-icon" doesn't appear to work all the time.
-                // Instead of using an absolute index, get the object that fits the following criteria:
-                if (newObj->getPosition() == m_difficultySprite->getPosition()
-                && newObj->getZOrder() == 3) {
-                    //newObj->setColor({0, 255, 0});
-                    originalIcon = newObj;
-                    iconFound = true;
-                    break;
+        // GD 2.2081: сначала пробуем найти по node ID
+        if (auto byId = this->getChildByID("difficulty-sprite")) {
+            originalIcon = dynamic_cast<CCSprite*>(byId);
+            iconFound = (originalIcon != nullptr);
+        }
+
+        // Запасной вариант: ищем по позиции и z-order
+        if (!iconFound) {
+            for (auto* obj : CCArrayExt<CCNode*>(this->getChildren())) {
+                if (CCSprite* newObj = dynamic_cast<CCSprite*>(obj)) {
+                    if (newObj->getPosition() == m_difficultySprite->getPosition()
+                    && (newObj->getZOrder() == 3 || newObj->getZOrder() == 4)) {
+                        originalIcon = newObj;
+                        iconFound = true;
+                        break;
+                    }
                 }
             }
         }
 
-        // If the demon face somehow isn't found, notify the user.
         if (originalIcon == nullptr || !iconFound) {
-            auto alert = FLAlertLayer::create("Error", "There was a problem loading the demon difficulty face.\nYour sceen resolution may not be supported.\n\n<cb>-Grandpa Demon</c>", "OK");
+            auto alert = FLAlertLayer::create("Error", "There was a problem loading the demon difficulty face.\nYour screen resolution may not be supported.\n\n<cb>-Grandpa Demon</c>", "OK");
             alert->m_scene = this;
             alert->show();
             return;
         }
 
         CCSprite* newIcon = ListManager::getSpriteFromPosition(aredlPos, true);
-        //CCSprite* newIcon = CCSprite::createWithSpriteFrameName("GrD_demon0_text.png"_spr);
+        if (!newIcon) {
+            log::warn("GrandpaDemon: getSpriteFromPosition returned null");
+            return;
+        }
         newIcon->setID("grd-difficulty");
         
         auto newPos = originalIcon->getPosition();
         newIcon->setPosition(originalIcon->getPosition());
         newIcon->setZOrder(originalIcon->getZOrder()+10);
-        
+        if (newIcon->getContentSize().height > 0) {
+            float targetH = originalIcon->getContentSize().height * originalIcon->getScale();
+            float fillRatio = 0.88f;
+            newIcon->setScale((targetH / newIcon->getContentSize().height) / fillRatio);
+        }
 
-        CCObject* clearObj;
-        CCARRAY_FOREACH(originalIcon->getChildren(), clearObj) {
+        for (auto* clearObj : CCArrayExt<CCNode*>(originalIcon->getChildren())) {
             if (CCSprite* newObj = dynamic_cast<CCSprite*>(clearObj)) {
                 if (newObj->getTag() == 69420) {
                     newObj->removeFromParentAndCleanup(true);
@@ -69,8 +75,7 @@ class $modify(GrDInfoLayer, LevelInfoLayer) {
             }
         }
 
-        CCObject* iconObj;
-        CCARRAY_FOREACH(originalIcon->getChildren(), iconObj) {
+        for (auto* iconObj : CCArrayExt<CCNode*>(originalIcon->getChildren())) {
             if (CCSprite* newObj = dynamic_cast<CCSprite*>(iconObj)) {
                 newObj->setTag(69420);
                 this->addChild(newObj);
@@ -79,7 +84,6 @@ class $modify(GrDInfoLayer, LevelInfoLayer) {
         }
 
         originalIcon->setVisible(false);
-
         this->addChild(newIcon);
         
         if (m_fields->m_hasBeenOpened) {
@@ -104,7 +108,6 @@ class $modify(GrDInfoLayer, LevelInfoLayer) {
                 particle2->setPosition({newIcon->getPositionX(), newIcon->getPositionY() + 5.f});
                 this->addChild(particle2);
             }
-
         }
 
         if (aredlPos <= 74 && aredlPos > 24) {
@@ -115,7 +118,6 @@ class $modify(GrDInfoLayer, LevelInfoLayer) {
                 particle->setPosition({newIcon->getPositionX(), newIcon->getPositionY() + 5.f});
                 this->addChild(particle);
             }
-            
         }
 
         if (aredlPos <= 149 && aredlPos > 74) {
@@ -126,7 +128,6 @@ class $modify(GrDInfoLayer, LevelInfoLayer) {
                 particle->setPosition({newIcon->getPositionX(), newIcon->getPositionY() + 5.f});
                 this->addChild(particle);
             }
-      
         }
         
         m_fields->m_hasBeenOpened = true;

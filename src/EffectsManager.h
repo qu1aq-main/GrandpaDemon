@@ -1,6 +1,10 @@
 #ifndef EFFECTSMANAGER_H
 #define EFFECTSMANAGER_H
 
+#include <Geode/Geode.hpp>
+#include <Geode/modify/LevelInfoLayer.hpp>
+#include "ListManager.h"
+
 using namespace geode::prelude;
 
 class EffectsManager {
@@ -13,8 +17,8 @@ class EffectsManager {
 
             CCSprite* bg = nullptr;
 
-            CCObject* obj;
-            CCARRAY_FOREACH(layer->getChildren(), obj) {
+            
+            for (auto* obj : CCArrayExt<CCNode*>(layer->getChildren())) {
                 if (CCSprite* spr = dynamic_cast<CCSprite*>(obj)) {
                     if (spr->getScaledContentSize().width >= CCDirector::sharedDirector()->getWinSize().width - 5) {
                         bg = spr;
@@ -22,6 +26,9 @@ class EffectsManager {
                 }
             }
 
+            if (!bg) { log::warn("GrandpaDemon: background sprite not found (infinity)"); return; }
+            if (!bg) { log::warn("GrandpaDemon: bg not found (infinity)"); return; }
+            if (!bg) { log::warn("GrandpaDemon: bg not found (infinity)"); return; }
             bg->setZOrder(-10);
             bg->setColor({75, 75, 0});
 
@@ -34,8 +41,8 @@ class EffectsManager {
             float bg2_maxAlpha = 90.f;
             float bg2_offsetAlpha = 50.f;
 
-            CCObject* rObj;
-            CCARRAY_FOREACH(layer->getChildren(), rObj) {
+            
+            for (auto* rObj : CCArrayExt<CCNode*>(layer->getChildren())) {
                 if (CCSprite* spr = dynamic_cast<CCSprite*>(rObj)) {
                     if (spr->getPositionY() < 1) {
                         spr->setOpacity(50);
@@ -46,10 +53,10 @@ class EffectsManager {
 
             // BG 1
 
-            CCSprite* bg1 = CCSprite::create("GrD_demon4_bg.png"_spr);
+            CCSprite* bg1 = ListManager::createBgSprite("GrD_demon4_bg.png");
             bg1->setBlendFunc(blending);
             float bg1_scale = winSize.width / bg1->getContentSize().width; 
-            bg1->setOpacity(0);
+            bg1->setOpacity(60);
             bg1->setScale(bg1_scale);
             bg1->setColor({ 249, 249, 165 });
             layer->addChild(bg1);
@@ -96,9 +103,9 @@ class EffectsManager {
 
             // BG 2
 
-            CCSprite* bg2 = CCSprite::create("GrD_demon4_bg.png"_spr);
+            CCSprite* bg2 = ListManager::createBgSprite("GrD_demon4_bg.png");
             bg2->setBlendFunc(blending);
-            bg2->setOpacity(0);
+            bg2->setOpacity(40);
             bg2->setScale(bg1_scale * 2.f);
             bg2->setColor({ 231, 231, 195 });
             layer->addChild(bg2);
@@ -159,8 +166,8 @@ class EffectsManager {
 
             CCSprite* bg = nullptr;
 
-            CCObject* obj;
-            CCARRAY_FOREACH(layer->getChildren(), obj) {
+            
+            for (auto* obj : CCArrayExt<CCNode*>(layer->getChildren())) {
                 if (CCSprite* spr = dynamic_cast<CCSprite*>(obj)) {
                     if (spr->getScaledContentSize().width >= CCDirector::sharedDirector()->getWinSize().width - 5) {
                         bg = spr;
@@ -168,6 +175,9 @@ class EffectsManager {
                 }
             }
 
+            if (!bg) { log::warn("GrandpaDemon: background sprite not found (mythical)"); return; }
+            if (!bg) { log::warn("GrandpaDemon: bg not found (mythical)"); return; }
+            if (!bg) { log::warn("GrandpaDemon: bg not found (mythical)"); return; }
             bg->setZOrder(-10);
             bg->setColor({ 65, 41, 142 });
 
@@ -177,8 +187,8 @@ class EffectsManager {
             float bg1_maxAlpha = 50.f;
             float bg1_offsetAlpha = 130.f;
 
-            CCObject* rObj;
-            CCARRAY_FOREACH(layer->getChildren(), rObj) {
+            
+            for (auto* rObj : CCArrayExt<CCNode*>(layer->getChildren())) {
                 if (CCSprite* spr = dynamic_cast<CCSprite*>(rObj)) {
                     if (spr->getPositionY() < 1) {
                         spr->setOpacity(50);
@@ -189,10 +199,10 @@ class EffectsManager {
 
             // BG 1
 
-            CCSprite* bg1 = CCSprite::create("GrD_demon4_bg.png"_spr);
+            CCSprite* bg1 = ListManager::createBgSprite("GrD_demon4_bg.png");
             bg1->setBlendFunc(blending);
             float bg1_scale = winSize.width / bg1->getContentSize().width; 
-            bg1->setOpacity(0);
+            bg1->setOpacity(80);
             bg1->setScale(bg1_scale);
             bg1->setColor({ 76, 63, 118 });
             layer->addChild(bg1);
@@ -244,8 +254,8 @@ class EffectsManager {
 
             CCSprite* bg = nullptr;
 
-            CCObject* obj;
-            CCARRAY_FOREACH(layer->getChildren(), obj) {
+            
+            for (auto* obj : CCArrayExt<CCNode*>(layer->getChildren())) {
                 if (CCSprite* spr = dynamic_cast<CCSprite*>(obj)) {
                     if (spr->getScaledContentSize().width >= CCDirector::sharedDirector()->getWinSize().width - 5) {
                         bg = spr;
@@ -253,6 +263,9 @@ class EffectsManager {
                 }
             }
 
+            if (!bg) { log::warn("GrandpaDemon: background sprite not found (legendary)"); return; }
+            if (!bg) { log::warn("GrandpaDemon: bg not found (legendary)"); return; }
+            if (!bg) { log::warn("GrandpaDemon: bg not found (legendary)"); return; }
             bg->setZOrder(-10);
             bg->setColor({ 207, 112, 254 });
 
@@ -262,8 +275,8 @@ class EffectsManager {
             float bg1_maxAlpha = 40.f;
             float bg1_offsetAlpha = 100.f;
 
-            CCObject* rObj;
-            CCARRAY_FOREACH(layer->getChildren(), rObj) {
+            
+            for (auto* rObj : CCArrayExt<CCNode*>(layer->getChildren())) {
                 if (CCSprite* spr = dynamic_cast<CCSprite*>(rObj)) {
                     if (spr->getPositionY() < 1) {
                         spr->setOpacity(50);
@@ -274,10 +287,10 @@ class EffectsManager {
 
             // BG 1
 
-            CCSprite* bg1 = CCSprite::create("GrD_demon4_bg.png"_spr);
+            CCSprite* bg1 = ListManager::createBgSprite("GrD_demon4_bg.png");
             bg1->setBlendFunc(blending);
             float bg1_scale = winSize.width / bg1->getContentSize().width; 
-            bg1->setOpacity(0);
+            bg1->setOpacity(60);
             bg1->setScale(bg1_scale);
             bg1->setColor({ 55, 48, 78 });
             layer->addChild(bg1);
