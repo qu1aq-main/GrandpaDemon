@@ -6,8 +6,27 @@ using namespace geode::prelude;
 class ParticleManager {
     public:
 
+    // Cache the plist dictionary so we only read from disk once.
+    // CCDictionary::createWithContentsOfFileThreadSafe on every particle
+    // creation causes a noticeable main-thread file I/O freeze.
+    inline static CCDictionary* getBaseDict() {
+        static CCDictionary* s_dict = nullptr;
+        if (!s_dict) {
+            s_dict = CCDictionary::createWithContentsOfFileThreadSafe("dragEffect.plist");
+            if (s_dict) s_dict->retain();
+        }
+        // Return a fresh mutable copy each time (we'll modify keys per-call)
+        if (!s_dict) return CCDictionary::create();
+        auto* copy = CCDictionary::create();
+        auto* keys = s_dict->allKeys();
+        for (auto* keyObj : CCArrayExt<CCString*>(keys)) {
+            copy->setObject(s_dict->objectForKey(keyObj->getCString()), keyObj->getCString());
+        }
+        return copy;
+    }
+
     inline static CCParticleSystem* legendaryParticles(int numParticles) {
-            auto dict = CCDictionary::createWithContentsOfFileThreadSafe("dragEffect.plist");
+            auto dict = getBaseDict();
 
             dict->setObject(CCString::create("1"), "emitterType");
             dict->setObject(CCString::create("-1"), "duration");
@@ -60,7 +79,7 @@ class ParticleManager {
 
 
         inline static CCParticleSystem* mythicalParticles(int numParticles) {
-            auto dict = CCDictionary::createWithContentsOfFileThreadSafe("dragEffect.plist");
+            auto dict = getBaseDict();
 
             dict->setObject(CCString::create("1"), "emitterType");
             dict->setObject(CCString::create("-1"), "duration");
@@ -113,7 +132,7 @@ class ParticleManager {
 
 
         inline static CCParticleSystem* infiniteParticles1(int numParticles, bool isGrandpa) {
-            auto dict = CCDictionary::createWithContentsOfFileThreadSafe("dragEffect.plist");
+            auto dict = getBaseDict();
 
             dict->setObject(CCString::create("1"), "emitterType");
             dict->setObject(CCString::create("-1"), "duration");
@@ -172,7 +191,7 @@ class ParticleManager {
         }
 
         inline static CCParticleSystem* infiniteParticles2(int numParticles) {
-            auto dict = CCDictionary::createWithContentsOfFileThreadSafe("dragEffect.plist");
+            auto dict = getBaseDict();
 
             dict->setObject(CCString::create("1"), "emitterType");
             dict->setObject(CCString::create("-1"), "duration");
